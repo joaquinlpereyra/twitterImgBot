@@ -8,7 +8,8 @@ Also [check out my blog post about it](http://joaquinlp.me/blog/simple-twitter-i
 Setting it up
 ===============
 You'll need tweepy. If you don't have it, run:
-''' pip install tweepy '''
+
+``` pip install tweepy ```
 
 You'll also need to modify the script to specify your twitter authentication keys and the source folder for your images.
 
