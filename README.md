@@ -1,7 +1,8 @@
-ImageTwitterBot
+twitterImgBot
 ===============
 
-A small script that takes a folder as an input and twitts a random image in that folder every time you execute the script. If you combine it with cron or other task scheduler, it efectively becomes a very simple twitter image bot.
+Small script written in python to twitt a randomly chosen image from a folder. 
+Takes API key, token and a path as arguments.
 
 Also [check out my blog post about it](http://joaquinlp.me/blog/simple-twitter-image-bot-in-python/), there are examples and a bit more informartion. 
 

@@ -1,0 +1,57 @@
+#!/usr/bin/python
+
+import argparse
+import tweepy
+import glob
+import random
+
+def twitt_it(path, api):
+    images = glob.glob(path + "*")
+    image_open = images[random.randint(0, len(images))-1]
+    api.update_with_media(image_open)
+
+
+def run():
+    """gets parameters and deals with authentication"""
+    parser = argparse.ArgumentParser(description="""
+         Twitts a random image from a folder""")
+    parser.add_argument(
+        '--api_key',
+        type=str,
+        required=True,
+        help="Your API key. You should get it from twitter")
+    parser.add_argument(
+        '--secret_key',
+        type=str,
+        required=True,
+        help="Your secret API key. You should get it from twitter")
+    parser.add_argument(
+        '--token',
+        type=str,
+        required=True,
+        help="Your OAUTH token. You should get it from twitter")
+    parser.add_argument(
+        '--secret_token',
+        type=str,
+        required=True,
+        help="Your secret token. You should get it from twitter")
+    parser.add_argument(
+        '--path',
+        type=str,
+        required=True,
+        help="""The path where images are. The script will choose one
+             at random and twitt it.""")
+    arguments = parser.parse_args()
+    path = arguments.path
+    api_key = arguments.api_key
+    secret_key = arguments.secret_key
+    token = arguments.token
+    secret_token = arguments.secret_token
+    auth = tweepy.OAuthHandler(api_key, secret_key)
+    auth.set_access_token(token, secret_token)
+    api = tweepy.API(auth)
+    twitt_it(path, api)
+
+if __name__ == '__main__':
+    run()
+
