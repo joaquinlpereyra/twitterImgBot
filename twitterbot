@@ -18,13 +18,14 @@ class Tweet():
             Tweet.is_already_tweeted(log_file, selected_media, allow_repeat_after)
             or Tweet.is_banned(dont_tweet_file, selected_media)
             ):
-                self.media(source_folder, dont_tweet_file)
+                self.media(source_folder, dont_tweet_file, log_file,
+                           allow_repeat_after)
         return(selected_media)
 
     @staticmethod
     def is_already_tweeted(log_file, image, allow_repeat_after):
-        if os.path.getsize(log_file) == 0:
-            return True
+        if os.path.isfile(log_file):
+            return False
         try:
             already_tweeted = open(log_file, 'r').readlines()[allow_repeat_after]
         except IndexError:
