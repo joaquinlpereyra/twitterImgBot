@@ -30,7 +30,7 @@ You'll need tweepy. If you don't have it, run:
 
 You should also fill the config file with the appropriate information. This is an example of the config file used for @gentelindaOK, minus sensible information:
 
-'''
+```
 # Replace where appropriate with your own settings.
 
 [Twitter]
@@ -64,7 +64,7 @@ request_answers = specially for you. xoxo
   can you feel your species deprecation?. xoxo
 request_to_third_answers = you just got a nice gift from
   apparently this person likes you
-'''
+```
 Usage
 ===============
 
