@@ -14,20 +14,21 @@ class Tweet():
               allow_repeat_after):
         media_list = glob.glob(source_folder + "*")
         selected_media = random.choice(media_list)
-        if (
-            Tweet.is_already_tweeted(log_file, selected_media, allow_repeat_after)
-            or Tweet.is_banned(dont_tweet_file, selected_media)
-            ):
-                self.media(source_folder, dont_tweet_file, log_file,
-                           allow_repeat_after)
+        already_tweeted = self.is_already_tweeted(log_file, selected_media,
+                                                  allow_repeat_after)
+        banned = self.is_banned(dont_tweet_file, selected_media)
+        if already_tweeted or banned:
+            self.media(source_folder, dont_tweet_file, log_file,
+                       allow_repeat_after)
         return(selected_media)
 
     @staticmethod
     def is_already_tweeted(log_file, image, allow_repeat_after):
+        tolerance = -1*(allow_repeat_after)
         if os.path.isfile(log_file):
             return False
         try:
-            already_tweeted = open(log_file, 'r').readlines()[allow_repeat_after]
+            already_tweeted = open(log_file, 'r').readlines()[tolerance]
         except IndexError:
             already_tweeted = open(log_file, 'r').readlines()
         for element in already_tweeted:
@@ -42,6 +43,7 @@ class Tweet():
 
     def text(self, text):
         return(text)
+
 
 def create_tweet(log_file, source_folder, dont_tweet_file, allow_repeat_after,
                  api, text=None, reply_id=None):
@@ -79,7 +81,7 @@ def check_orders(master_account, bot_account,
                 last_media = open(log_file, 'r').readlines()[-1]
                 last_media = last_media.split('\t')[1]
                 # add that media to our don't tweet list
-                with open(dont_tweet_file_file, 'a') as banned:
+                with open(dont_tweet_file, 'a') as banned:
                     banned.write(str(last_media) + '\n')
     for element in api.search(bot_account):
         if is_recent(element, 5) and not already_answered(element, log_file):
@@ -127,6 +129,7 @@ def is_recent(tweet, time_in_minutes):
     else:
         return False
 
+
 def run():
     """Sets directory so we can read settings.txt.
        See if chance is met
@@ -156,7 +159,8 @@ def run():
     request_command = orders_config['request_command']
     answers_config = config['Texts']
     request_answers = answers_config['request_answers'].split('\n')
-    request_to_third_answers = answers_config['request_to_third_answers'].split('\n')
+    request_to_third_answers = (answers_config['request_to_third_answers']
+                                .split('\n'))
 
     auth = tweepy.OAuthHandler(api_key, secret_key)
     auth.set_access_token(token, secret_token)
