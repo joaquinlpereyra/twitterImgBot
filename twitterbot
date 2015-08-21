@@ -6,6 +6,7 @@ import tweepy
 import glob
 import random
 import datetime
+import argparse
 
 
 class Tweet():
@@ -18,8 +19,8 @@ class Tweet():
                                                   allow_repeat_after)
         banned = self.is_banned(dont_tweet_file, selected_media)
         if already_tweeted or banned:
-            self.media(source_folder, dont_tweet_file, log_file,
-                       allow_repeat_after)
+                self.media(source_folder, dont_tweet_file, log_file,
+                           allow_repeat_after)
         return(selected_media)
 
     @staticmethod
@@ -83,6 +84,10 @@ def check_orders(master_account, bot_account,
                 # add that media to our don't tweet list
                 with open(dont_tweet_file, 'a') as banned:
                     banned.write(str(last_media) + '\n')
+                log_string = ("BANNED " + last_media +
+                              "PER COMMAND ID: " + element.id)
+                with open(log_file, 'r') as log_file:
+                    log_file.write(log_string)
     for element in api.search(bot_account):
         if is_recent(element, 5) and not already_answered(element, log_file):
             if element.text.lower().startswith(request_command.lower()):
@@ -139,6 +144,11 @@ def run():
     # see where is the script is located...
     abspath = os.path.abspath(__file__)
     dname = os.path.dirname(abspath)
+    # read --test option from command line
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--test", help="Ignores execution chance, always run",
+                        action="store_true")
+    args = parser.parse_args()
     # read configs from file
     config = configparser.ConfigParser()
     config.read(dname + '/bot_settings.ini')
@@ -159,8 +169,8 @@ def run():
     request_command = orders_config['request_command']
     answers_config = config['Texts']
     request_answers = answers_config['request_answers'].split('\n')
-    request_to_third_answers = (answers_config['request_to_third_answers']
-                                .split('\n'))
+    request_to_third_answers = answers_config['request_to_third_answers']
+    request_to_third_answers = request_to_third_answers.split('\n')
 
     auth = tweepy.OAuthHandler(api_key, secret_key)
     auth.set_access_token(token, secret_token)
@@ -171,7 +181,8 @@ def run():
                  request_to_third_answers, allow_repeat_after, api)
 
     chance = int(app_config['execution_chance'])
-    if random.randint(0, 99) < chance:
+
+    if random.randint(0, 99) < chance or args.test:
         # only if chance is met
 
         create_tweet(log_file, source_folder, dont_tweet_file,
