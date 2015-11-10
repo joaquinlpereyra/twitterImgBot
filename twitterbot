@@ -26,10 +26,10 @@ class Tweet():
     @staticmethod
     def is_already_tweeted(log_file, image, allow_repeat_after):
         tolerance = -1*(allow_repeat_after)
-        if os.path.isfile(log_file):
+        if not os.path.isfile(log_file): # if log_file isn't a file just return false
             return False
         try:
-            already_tweeted = open(log_file, 'r').readlines()[tolerance]
+            already_tweeted = open(log_file, 'r').readlines()[tolerance:]
         except IndexError:
             already_tweeted = open(log_file, 'r').readlines()
         for element in already_tweeted:
@@ -39,7 +39,7 @@ class Tweet():
     @staticmethod
     def is_banned(banned_list, selected_media):
         with open(banned_list, 'r') as banned:
-            if selected_media in banned:
+            if (selected_media + "\n") in banned:
                 return True
 
     def text(self, text):
