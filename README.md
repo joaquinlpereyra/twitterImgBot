@@ -8,12 +8,14 @@ twitter bot.
 Features:
 * Separate config file. You don't have to touch a line of code.
 * Commands: set up a 'master account' and 'ban command' and ban images so the
-bot deletes them from twitter and never posts them again.
+bot deletes them from twitter and never posts them again. (now working! thanks
+Anatoly!)
 * Request: any user can request an image with a request_command. they can also
 request an image for another user as a gift.
 * Custom answers: a list of possible text answers to requests can be given.
 * No repeat: bot will not repeat images! you can set the tolerance in the
-allow_repeat_after setting in the config file.
+allow_repeat_after setting in the config file. (also working now! thanks again
+to Anatoly!)
 * Execution chance makes it possible to run the script every minute to check
 for requests and commands while not posting. This way the script doesn't have
 to run on the background. Make it higher if you want your bot to tweet more
@@ -65,6 +67,7 @@ request_answers = specially for you. xoxo
 request_to_third_answers = you just got a nice gift from
   apparently this person likes you
 ```
+
 Usage
 ===============
 
@@ -78,7 +81,8 @@ Live example and full automation idea
 You can check out [gentelindaOK](http://twitter.com/gentelindaOK) to see
 a working account using this twitter bot.
 
-@gentelindaOK is a fully automatic bot. My modified version of (RedditImageGrab)[https://github.com/joaquinlpereyra/RedditImageGrab]
+@gentelindaOK is a fully automatic bot. My modified version of [RedditImageGrab
+](https://github.com/joaquinlpereyra/RedditImageGrab)
 downloads new images to my PC from a multireddit every morning. Then, a silly
 one line bash command removes any image that is smaller than 50kb (to filter
 glitches and very small pictures). This twitter bot is set up on cron
