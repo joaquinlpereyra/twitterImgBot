@@ -19,14 +19,14 @@ class Tweet():
                                                   allow_repeat_after)
         banned = self.is_banned(dont_tweet_file, selected_media)
         if already_tweeted or banned:
-                self.media(source_folder, dont_tweet_file, log_file,
-                           allow_repeat_after)
+                return(self.media(source_folder, dont_tweet_file, log_file,
+                           allow_repeat_after)) #is 'try again' recursion?
         return(selected_media)
 
     @staticmethod
     def is_already_tweeted(log_file, image, allow_repeat_after):
         tolerance = -1*(allow_repeat_after)
-        if not os.path.isfile(log_file): # if log_file isn't a file just return false
+        if not os.path.isfile(log_file):
             return False
         try:
             already_tweeted = open(log_file, 'r').readlines()[tolerance:]
@@ -47,19 +47,21 @@ class Tweet():
 
 
 def create_tweet(log_file, source_folder, dont_tweet_file, allow_repeat_after,
-                 api, text=None, reply_id=None):
+                 test, api, text=None, reply_id=None):
     """Creates a tweet, full with text, media and reply_id"""
     tweet = Tweet()
     tweet_text = tweet.text(text)
     tweet_media = tweet.media(source_folder, dont_tweet_file, log_file,
                               allow_repeat_after)
-    api.update_with_media(
-        filename=tweet_media,
-        status=tweet_text,
-        in_reply_to_status_id=reply_id)
+    if not test:
+        api.update_with_media(
+            filename=tweet_media,
+            status=tweet_text,
+            in_reply_to_status_id=reply_id)
+    mark = "\t TEST" if test else ""
     with open(log_file, 'a') as log:
         log.write(str(datetime.datetime.now()) + '\t' + str(tweet_media) +
-                  '\t' + str(reply_id) + '\n')
+                  '\t' + str(reply_id) + mark +'\n')
 
 
 def check_orders(master_account, bot_account,
@@ -146,9 +148,13 @@ def run():
     dname = os.path.dirname(abspath)
     # read --test option from command line
     parser = argparse.ArgumentParser()
-    parser.add_argument("--test", help="Ignores execution chance, always run",
+    parser.add_argument("--twitt", help="Ignores execution chance, always run",
+                        action="store_true")
+    parser.add_argument("--test", help="Won't twitt, just write to log",
                         action="store_true")
     args = parser.parse_args()
+    test = args.test
+    forceTwitt = args.twitt
     # read configs from file
     config = configparser.ConfigParser()
     config.read(dname + '/bot_settings.ini')
@@ -182,11 +188,11 @@ def run():
 
     chance = int(app_config['execution_chance'])
 
-    if random.randint(0, 99) < chance or args.test:
+    if random.randint(0, 99) < chance or forceTwitt or test:
         # only if chance is met
 
         create_tweet(log_file, source_folder, dont_tweet_file,
-                     allow_repeat_after, api)
+                     allow_repeat_after, test, api)
 
 if __name__ == '__main__':
     run()
