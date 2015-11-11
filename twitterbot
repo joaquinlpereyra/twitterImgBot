@@ -188,7 +188,7 @@ def run():
 
     chance = int(app_config['execution_chance'])
 
-    if random.randint(0, 99) < chance or forceTwitt or test:
+    if random.randint(0, 99) < chance or forceTweet or test:
         # only if chance is met
 
         create_tweet(log_file, source_folder, dont_tweet_file,
