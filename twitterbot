@@ -148,13 +148,13 @@ def run():
     dname = os.path.dirname(abspath)
     # read --test option from command line
     parser = argparse.ArgumentParser()
-    parser.add_argument("--twitt", help="Ignores execution chance, always run",
+    parser.add_argument("--tweet", help="Ignores execution chance, always run",
                         action="store_true")
     parser.add_argument("--test", help="Won't twitt, just write to log",
                         action="store_true")
     args = parser.parse_args()
     test = args.test
-    forceTwitt = args.twitt
+    forceTweet = args.tweet
     # read configs from file
     config = configparser.ConfigParser()
     config.read(dname + '/bot_settings.ini')
