@@ -104,7 +104,7 @@ def check_orders(master_account, bot_account,
                     answer = random.choice(request_answers)
                     text = ('@' + user_name + ' ' + answer)
                 create_tweet(log_file, source_folder, dont_tweet_file,
-                             allow_repeat_after, , False, api, text, reply_id)
+                             allow_repeat_after, False, api, text, reply_id)
 
 
 def already_answered(tweet, log_file):

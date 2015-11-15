@@ -23,6 +23,19 @@ often!
 * Ideal for setting up a bot at home: you don't need a server; just python
 and a bunch of images in a folder.
 
+Known bugs
+===============
+There has been some bugs reports having to do with the repetition of images.
+If the bot twitts two images in a row (or you're experiencing any other kind
+of malfunction having to do with allow_repeat_after), you should try the
+[fork by johnnykernel](https://github.com/johnnykernel/twitterImgBot).
+
+This fork doesn't have the ability to respond to request or ban images though,
+and uses a way simpler method: it moves images which were alreday tweeted to 
+a different folder.
+
+Fair to say, my own tests haven't given me any problem with repetition. So 
+you should try on your own and decide :)
 
 Set up
 ===============
