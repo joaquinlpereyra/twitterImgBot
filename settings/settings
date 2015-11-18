@@ -1,0 +1,33 @@
+# Replace where apropiate with your own settings.
+
+[Twitter]
+api_key = pECybPQWFKqPQzw73pGvXyvzq
+secret_key = iOquhJjsOpY57lUJTd0cPcGjpF2zTAtiTbUnttsrSCFYe0RHa6
+token = 2820757815-XAESk14vjJro5tkt8zNBSohCh4Q2xCI0FiWvh06
+secret_token = dkTmkJrJ8KYFkryI7scMu2bnRTCvYfMdXQ8gBqfuR9C77
+
+[App]
+image_folder = 
+execution_chance = 1
+allow_repeat_after = 50
+log_file = 
+bot_account = 
+master_account = 
+dont_tweet_file = 
+
+[Orders]
+#caps agnostic
+ban_command = 
+request_command = 
+
+[Texts]
+#Respect indentation: it is TWO spaces
+request_answers = answer1
+  answer2
+  answer3
+  ...
+  answerN
+request_to_third_answers = answer1
+  answer2
+  ...
+  answerN
