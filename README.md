@@ -24,7 +24,7 @@ and a bunch of images in a folder.
 
 v2 of the bot (realesead 18-nov-2015) was a complete rewrite of the script to 
 make it more scalable. I doesn't add a lot of new features for the user though,
-apart from some new log warnings. BUT it is twice as fast.
+apart from some new log warnings. **BUT** it is twice as fast.
 
 v2:
 ```
@@ -43,9 +43,9 @@ You'll need tweepy. If you don't have it, run:
 
 ```pip install tweepy```
 
-You should also fill the config file with the appropriate information. 
+You should also fill the settings file in the 'settings' folder with the appropriate information. 
 
-PLEASE MAKE SURE all settings are filled correctly and that paths are written
+Make sure **all** settings are filled correctly and that paths are written
 correctly. Do use full paths.
 
 This is an example of the config file used for @gentelindaOK, minus sensible information. 
