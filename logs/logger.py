@@ -18,4 +18,4 @@ def addBanned(reply_id, log):
 
 def addWarning(warning, log):
     with open(log, 'a') as log:
-        log.write(date + '\t' + warning)
+        log.write(date + '\t' + warning + '\n')
