@@ -1,0 +1,32 @@
+# Replace where appropriate with your own settings.
+
+[Twitter]
+api_key =
+secret_key =
+token =
+secret_token =
+
+[App]
+image_folder = 
+execution_chance = 
+allow_repeat_after = 
+log_file = 
+bot_account = 
+master_account = 
+dont_tweet_file = 
+
+[Orders]
+#caps agnostic
+ban_command = 
+request_command = 
+
+[Texts]
+#Respect indentation
+request_answers = answer1
+  answer2
+  ...
+  answerN
+request_to_third_answers = awnser2
+  answer2
+  ...
+  answerN
