@@ -1,15 +1,15 @@
-# Replace where apropiate with your own settings.
+# Replace where appropriate with your own settings.
 
 [Twitter]
-api_key = 
-secret_key = 
-token = 
-secret_token = 
+api_key =
+secret_key =
+token =
+secret_token =
 
 [App]
 image_folder = 
-execution_chance = 1
-allow_repeat_after = 50
+execution_chance = 
+allow_repeat_after = 
 log_file = 
 bot_account = 
 master_account = 
