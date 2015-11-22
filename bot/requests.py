@@ -77,12 +77,9 @@ def request_to_whom(tweet):
     tweet = tweet.text
     divide_tweet = tweet.partition("to @")[2]
     whom = divide_tweet.partition(" ")[0]
-    # if request is "send img to @friend!" bot should say @friend not @friend!
-    if whom.isalpha():
-        return whom
-    else:
-        realWhom = ""
-        for letter in whom:
-            if letter.isalpha():
-                realWhom = realWhom+letter
-        return realWhom
+    # requests to "@fri_end!" should be given to "@fri_end" not "@fri_end!"
+    realWhom = ""
+    for letter in whom:
+        if letter.isalpha() or letter == "_":
+            realWhom = realWhom+letter
+    return realWhom
