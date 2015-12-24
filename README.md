@@ -1,9 +1,9 @@
 twitterImgBot
 ===============
 
-Python script wich main function is tweeting pictures from a given folder. 
-It can easily be used together with cron or another task scheduler to create a Twitter bot.
-All you need is a computer with internet connection and a folder with images.
+Python script wich main function is tweeting pictures from a given folder.
+
+It can easily be used together with cron or another task scheduler to create a Twitter bot. All you need is a computer with internet connection and a folder with images.
 
 Features
 ==============
@@ -18,7 +18,11 @@ Features
 
 Setup
 ===============
-**In short**: You'll need python3, tweepy and the [twitter tokens](https://dev.twitter.com/oauth/overview/application-owner-access-token). You need to fill the settings file inside the 'settings' folder with the appropiate information *(every option is expalined below in detail)*. You'll probably want a task scheduler too (more information about this in the **live example and full automation idea** section). 
+
+**In short**: You'll need python3, tweepy and the [twitter tokens](https://dev.twitter.com/oauth/overview/application-owner-access-token). You need to fill the settings file inside the 'settings' folder with the appropiate information *(every option is expalined below in detail)*. You'll probably want a task scheduler too (to fully [automate the bot](
+#Live-example-and-full-automation-idea)). 
+
+**Longish explanation**:
 
 Python3 comes with pretty much every modern distro, but you probably don't have tweepy installed. Then you should install pip.
 ```sudo apt-get install python3-pip```
@@ -27,7 +31,7 @@ Then you should install tweepy.
 
 ```pip install tweepy```
 
-Make sure **all** settings are filled correctly. Double check paths. Do use full paths (not ~/bot/ but /home/username/bot/). Do end paths with /.The bot **will** fail. 
+Make sure **all** settings are filled correctly. Double check paths. Do use full paths (not ~/bot/ but /home/username/bot/). Do end paths with /.The bot **will** fail. There's a detailed explanation of every setting in the 
 
 This is an example of the config file used for @gentelindaOK, minus sensible information. 
 
