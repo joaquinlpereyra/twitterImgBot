@@ -35,7 +35,7 @@ You should then complete the settings file inside the settings folder. There's a
 * Make sure **all** settings are filled correctly.
 * Double check paths.
 * Do use full paths *(not ~/bot/ but /home/username/bot/)*.}
-* Do end paths with **/**.
+* Do end paths with **/** (*forward slash*).
 
 The bot **WILL** ~~probably~~ fail if these conditions are not met. 
 
