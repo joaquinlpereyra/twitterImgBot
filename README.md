@@ -25,7 +25,7 @@ You need:
 * tweepy
 * [Twitter tokens](https://dev.twitter.com/oauth/overview/application-owner-access-token)
 
-You'll probably also want a task scheduler like cron to [fully automate the bot](#live-example-and-full-automation-idea).
+You'll probably also want a task scheduler like cron to [fully automate the bot](#live-example-and-full-automation-idea). If you use a task scheduler, set the script to run **AT LEAST** once every five minutes and use the execution_chance option to control how often the bot should tweet. If you run the script less than every five minutes, the bot can miss some requests. This is a bug to be fixed in the next version. 
 
 Python3 comes with pretty much every modern distro, but you probably don't have tweepy installed. You should install pip.
 ```sudo apt-get install python3-pip``` and then tweepy ```pip install tweepy```.
@@ -47,7 +47,7 @@ Options
   - Everything in this section is provided by Twitter. [Check this out.](https://dev.twitter.com/oauth/overview/application-owner-access-tokens)
 - **[App]**
   - *image_folder*: source folder for the bot to look up the images to be posted.
-  - *execution_chance*: this makes the bot twitt at random intervals. Set it to a low value and have to bot execute very often: most of the time it will not twitt.
+  - *execution_chance*: this makes the bot tweet at random intervals. Set it to a low value and have to bot execute very often: most of the time it will not tweet. I find that 1 per cent execution_chance works well if the script runs every minute.
   - *allow_repeat_after*: how many images the bot must have posted before it is allowed to repeat a picture.
   - *log_file*: full path to the log file. You probably want to use *BOT_PATH/logs/log*. 
   - *bot_account*: the username for the bot account. **DO** start with @.
