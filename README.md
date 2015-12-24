@@ -28,16 +28,14 @@ Setup
 Python3 comes with pretty much every modern distro, but you probably don't have tweepy installed. You should install pip.
 ```sudo apt-get install python3-pip``` and then tweepy ```pip install tweepy```.
 
-You should then complete the settings file inside the settings folder. There's a detailed explanation of every setting in the [Options](#options) section. There's also a 
+You should then complete the settings file inside the settings folder. There's a [detailed explanation](#explanation) of every setting and also an [example config file](#example) [@gentelindaOK](http://twitter.com/gentelindaOK) **(NSFW)** in the [Options](#options) section. Please:
 
-*Make sure **all** settings are filled correctly.
-*Double check paths.
-*Do use full paths *(not ~/bot/ but /home/username/bot/)*.}
-*Do end paths with **/**.
+* Make sure **all** settings are filled correctly.
+* Double check paths.
+* Do use full paths *(not ~/bot/ but /home/username/bot/)*.}
+* Do end paths with **/**.
 
-The bot **WILL** fail if these conditions are not met. 
-
-There's a [detailed explanation](#explanation) of every setting and also an [example config file](#example) [@gentelindaOK](http://twitter.com/gentelindaOK) **(NSFW)** in the [Options](#options) section. 
+The bot **WILL** ~~probably~~ fail if these conditions are not met. 
 
 Options
 ===============
