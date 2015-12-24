@@ -25,34 +25,59 @@ Setup
 
 **Longish explanation**:
 
-Python3 comes with pretty much every modern distro, but you probably don't have tweepy installed. Then you should install pip.
-```sudo apt-get install python3-pip```
+Python3 comes with pretty much every modern distro, but you probably don't have tweepy installed. You should install pip.
+```sudo apt-get install python3-pip``` and then tweepy ```pip install tweepy```.
 
-Then you should install tweepy. 
+You should then complete the settings file inside the settings folder. There's a detailed explanation of every setting in the [Options](#options) section. There's also a 
 
-```pip install tweepy```
+*Make sure **all** settings are filled correctly.
+*Double check paths.
+*Do use full paths *(not ~/bot/ but /home/username/bot/)*.}
+*Do end paths with **/**.
 
-Make sure **all** settings are filled correctly. Double check paths. Do use full paths (not ~/bot/ but /home/username/bot/). Do end paths with /.The bot **will** fail. There's a detailed explanation of every setting in the [Options](#options) section. 
+The bot **WILL** fail if these conditions are not met. 
 
-This is an example of the config file used for @gentelindaOK, minus sensible information. 
+There's a [detailed explanation](#explanation) of every setting and also an [example config file](#example) [@gentelindaOK](http://twitter.com/gentelindaOK) **(NSFW)** in the [Options](#options) section. 
 
+Options
+===============
+
+### Explanation
+- **[Twitter]**
+  - Everything in this section is provided by Twitter. [Check this out.](https://dev.twitter.com/oauth/overview/application-owner-access-tokens)
+- **[App]**
+  - *image_folder*: source folder for the bot to look up the images to be posted.
+  - *execution_chance*: this makes the bot twitt at random intervals. Set it to a low value and have to bot execute very often: most of the time it will not twitt.
+  - *allow_repeat_after*: how many images the bot must have posted before it is allowed to repeat a picture.
+  - *log_file*: full path to the log file. You probably want to use *BOT_PATH/logs/log*. 
+  - *bot_account*: the username for the bot account. **DO** start with @.
+  - *master_account*: the username which the bot will listen to for delete commands. **DO** start with @.
+  - *dont_tweet_file*: full path to the banned images list file. You probably want to use *BOT_PATH/logs/banned*
+- **[Orders]**
+  - *ban_command*: if master_account tweets something starting with this, will delete last tweet and ban last image posted.
+  - *request_command*: if anybody tweets something starting with this, it will give them a picture. If tweet has a "to @(userB)" in it somewhere *and* starts with the request_command, bot will interpret as a gift from user posting to userB.  
+- **[Texts]**
+  -*requests_answers*: bot will choose randomly from here when complying to request from a request_command with no "to @". the reply will look like "@user request_answer"
+  -*requests_to_third_answers*: bot will choose ramdonly from here when complying to requests from a request_command with "to @" in it. the reply will look like "@userB request_to_third_answers @requester"
+
+### Example
 ```
 # Replace where appropriate with your own settings.
 
 [Twitter]
-api_key =
-secret_key =
-token =
-secret_token =
+api_key = your_api_key
+secret_key = your_secret_key
+token = your_token
+secret_token = your_secret_token
 
 [App]
-image_folder = /home/REDACTED/.twitter-bot/gentelindaok/
+image_folder = /home/botImages/
 execution_chance = 1
 allow_repeat_after = 50
-log_file = /home/joaquin/.scripts/bin/log
+log_file = /home/bot/logs/log
 bot_account = @gentelindaOK
 master_account = @amemulo
-dont_tweet_file = /home/REDACTED/.scripts/bin/dont_tweet
+dont_tweet_file = /home/bot/logs/banned
 
 [Orders]
 #caps agnostic
@@ -72,32 +97,13 @@ request_to_third_answers = you just got a nice gift from
   apparently this person likes you
 ```
 
-Options
-===============
-- **[Twitter]**
-  - Everything in this section is provided by Twitter. [Check this out.](https://dev.twitter.com/oauth/overview/application-owner-access-tokens)
-- **[App]**
-  - *image_folder*: source folder for the bot to look up the images to be posted.
-  - *execution_chance*: this makes the bot twitt at random intervals. Set it to a low value and have to bot execute very often: most of the time it will not twitt.
-  - *allow_repeat_after*: how many images the bot must have posted before it is allowed to repeat a picture.
-  - *log_file*: full path to the log file. You probably want to use *BOT_PATH/logs/log*. 
-  - *bot_account*: the username for the bot account. **DO** start with @.
-  - *master_account*: the username which the bot will listen to for delete commands. **DO** start with @.
-  - *dont_tweet_file*: full path to the banned images list file. You probably want to use *BOT_PATH/logs/banned*
-- **[Orders]**
-  - *ban_command*: if master_account tweets something starting with this, will delete last tweet and ban last image posted.
-  - *request_command*: if anybody tweets something starting with this, it will give them a picture. If tweet has a "to @(userB)" in it somewhere *and* starts with the request_command, bot will interpret as a gift from user posting to userB.  
-- **[Texts]**
-  -*requests_answers*: bot will choose randomly from here when complying to request from a request_command with no "to @". the reply will look like "@user request_answer"
-  -*requests_to_third_answers*: bot will choose ramdonly from here when complying to requests from a request_command with "to @" in it. the reply will look like "@userB request_to_third_answers @requester"
-
 
 Usage
 ===============
 
 **Execute it.** That's it.
 
-You also have a couple of optional arguments:
+You also have a couple of useful arguments:
 
 ```
 optional arguments:
@@ -108,7 +114,7 @@ optional arguments:
 
 Live example and full automation idea
 ==============
-You can check out [gentelindaOK](http://twitter.com/gentelindaOK) to see
+You can check out [gentelindaOK](http://twitter.com/gentelindaOK) **(NSFW)** to see
 a working account using this twitter bot.
 
 @gentelindaOK is a fully automatic bot. My modified version of [RedditImageGrab
