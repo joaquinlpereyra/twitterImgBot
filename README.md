@@ -1,7 +1,9 @@
 twitterImgBot
 ===============
 
-Python script wich main function is tweeting pictures from a given folder.
+There are way too many pretty pictures in the world to tweet all of them. twitterImgBot tries to solve just that.
+
+The primary objective of this bot is to tweet a random picture from a given folder every once in a while. But it does some other things too and has some pretty nice things built in as well. See [the features](#features).
 
 It can easily be used together with cron or another task scheduler to create a Twitter bot. All you need is a computer with internet connection and a folder with images.
 
