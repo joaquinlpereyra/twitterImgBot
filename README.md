@@ -19,8 +19,7 @@ Features
 Setup
 ===============
 
-**In short**: You'll need python3, tweepy and the [twitter tokens](https://dev.twitter.com/oauth/overview/application-owner-access-token). You need to fill the settings file inside the 'settings' folder with the appropiate information *(every option is expalined below in detail)*. You'll probably want a task scheduler too (to fully [automate the bot](
-#Live-example-and-full-automation-idea)). 
+**In short**: You'll need python3, tweepy and the [twitter tokens](https://dev.twitter.com/oauth/overview/application-owner-access-token). You need to fill the settings file inside the 'settings' folder with the appropiate information *(every option is expalined below in detail)*. You'll probably want a task scheduler too (to fully [automate the bot](#live-example-and-full-automation-idea)).
 
 **Longish explanation**:
 
@@ -31,7 +30,7 @@ Then you should install tweepy.
 
 ```pip install tweepy```
 
-Make sure **all** settings are filled correctly. Double check paths. Do use full paths (not ~/bot/ but /home/username/bot/). Do end paths with /.The bot **will** fail. There's a detailed explanation of every setting in the 
+Make sure **all** settings are filled correctly. Double check paths. Do use full paths (not ~/bot/ but /home/username/bot/). Do end paths with /.The bot **will** fail. There's a detailed explanation of every setting in the [Options](#options) section. 
 
 This is an example of the config file used for @gentelindaOK, minus sensible information. 
 
@@ -115,4 +114,4 @@ a working account using this twitter bot.
 downloads new images to my PC from a multireddit every morning. Then, a silly
 one line bash command removes any image that is smaller than 50kb (to filter
 glitches and very small pictures). This twitter bot is set up on cron
-on my PC to execute every minute with a 1 percent execution chance.
+on my PC to execute every minute with a 1 percent execution chance set on the script's config file.
