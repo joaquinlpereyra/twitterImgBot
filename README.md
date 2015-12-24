@@ -1,52 +1,33 @@
 twitterImgBot
 ===============
 
-Python script that automatically tweets a random picture from a given folder.
-It can easily be used together with cron or another task scheduler to create a working
-twitter bot.
-It started pretty simple but now it has quite a few features:
+Python script wich main function is tweeting pictures from a given folder. 
+It can easily be used together with cron or another task scheduler to create a Twitter bot.
+All you need is a computer with internet connection and a folder with images.
 
-Features:
-* Separate config file. You don't have to touch a line of code.
-* Commands: set up a 'master account' and 'ban command' and ban images so the
-bot deletes them from twitter and never posts them again. 
-* Request: any user can request an image with a request_command. they can also
-request an image for another user as a gift.
-* Custom answers: a list of possible text answers to requests can be given.
-* No repeat: bot will not repeat images! you can set the tolerance in the
-allow_repeat_after setting in the config file.
-* Execution chance makes it possible to run the script every minute to check
-for requests and commands while not posting. This way the script doesn't have
-to run on the background. Make it higher if you want your bot to tweet more
-often!
-* Ideal for setting up a bot at home: you don't need a server; just python
-and a bunch of images in a folder.
+Features
+==============
+* **Separate config file.** You don't have to touch a line of code. Of course can also do that if you wish <3.
+* **Delete tweets upon command:** The bot listens to a master account for an specified command to delete the last tweet. It will also ban the image posted in the deleted tweet, never uploading it again. 
+* **Handles requests:** The bot will also listen to tweets containing a custom string from any user and will post a random picture for them. A list of possible text answers to be posted along with the image can be given and the bot will choose one them at random. If a tweet from user A with the custom string is found and the tweet also has a "to @(user B)" the bot will interpret that the user A is gifting an image to user B. A list of possible text answers to such "gifts" can also be given.
+* **No repeat:** The bot won't repeat images until a custom amount of pictures have been posted in between. 
+* **Tweets at random intervals:** The bot can tweet at random intervals, behaving more like a human, instead of tweeting at totally predictable times.
+* ** Pretty fast:** The bot checks requests, commands from the master account and checks if it needs to upload a picture in less than a second. Of course, if the bot actually needs to upload something, it will probably take more time.
+* **Logs**: This actually needs to be improved to use Python's standard logging module, but it is good as it is and it gets the job done. The log contains date, image posted and the twitt that was being replied (if any).
+* **Doesn't need much:** Really, you're all set with python, tweepy, a task scheduler like cron and a bunch of images in a folder. Of course, you'll also need [to create a Twitter app to get your API key and such](https://dev.twitter.com/oauth/overview/application-owner-access-tokens). 
 
-v2 of the bot (realesead 18-nov-2015) was a complete rewrite of the script to 
-make it more scalable. I doesn't add a lot of new features for the user though,
-apart from some new log warnings. **BUT** it is twice as fast.
-
-v2:
-```
->>> test.measureTime()
-0.7329306602478027
-```
-v1:
-```
->>> test.measureTime()
-1.5387952327728271
-```
-
-Set up
+Setup
 ===============
-You'll need tweepy. If you don't have it, run:
+**In short**: You'll need python3, tweepy and the [twitter tokens](https://dev.twitter.com/oauth/overview/application-owner-access-token). You need to fill the settings file inside the 'settings' folder with the appropiate information *(every option is expalined below in detail)*. You'll probably want a task scheduler too (more information about this in the **live example and full automation idea** section). 
+
+Python3 comes with pretty much every modern distro, but you probably don't have tweepy installed. Then you should install pip.
+```sudo apt-get install python3-pip```
+
+Then you should install tweepy. 
 
 ```pip install tweepy```
 
-You should also fill the settings file in the 'settings' folder with the appropriate information. 
-
-Make sure **all** settings are filled correctly and that paths are written
-correctly. Do use full paths.
+Make sure **all** settings are filled correctly. Double check paths. Do use full paths (not ~/bot/ but /home/username/bot/). Do end paths with /.The bot **will** fail. 
 
 This is an example of the config file used for @gentelindaOK, minus sensible information. 
 
@@ -63,7 +44,7 @@ secret_token =
 image_folder = /home/REDACTED/.twitter-bot/gentelindaok/
 execution_chance = 1
 allow_repeat_after = 50
-log_file = /home/joaquin/.scripts/bin/log.log
+log_file = /home/joaquin/.scripts/bin/log
 bot_account = @gentelindaOK
 master_account = @amemulo
 dont_tweet_file = /home/REDACTED/.scripts/bin/dont_tweet
@@ -86,13 +67,30 @@ request_to_third_answers = you just got a nice gift from
   apparently this person likes you
 ```
 
+Options
+===============
+- **[Twitter]**
+  - Everything in this section is provided by Twitter. [Check this out.](https://dev.twitter.com/oauth/overview/application-owner-access-tokens)
+- **[App]**
+  - *image_folder*: source folder for the bot to look up the images to be posted.
+  - *execution_chance*: this makes the bot twitt at random intervals. Set it to a low value and have to bot execute very often: most of the time it will not twitt.
+  - *allow_repeat_after*: how many images the bot must have posted before it is allowed to repeat a picture.
+  - *log_file*: full path to the log file. You probably want to use *BOT_PATH/logs/log*. 
+  - *bot_account*: the username for the bot account. **DO** start with @.
+  - *master_account*: the username which the bot will listen to for delete commands. **DO** start with @.
+  - *dont_tweet_file*: full path to the banned images list file. You probably want to use *BOT_PATH/logs/banned*
+- **[Orders]**
+  - *ban_command*: if master_account tweets something starting with this, will delete last tweet and ban last image posted.
+  - *request_command*: if anybody tweets something starting with this, it will give them a picture. If tweet has a "to @(userB)" in it somewhere *and* starts with the request_command, bot will interpret as a gift from user posting to userB.  
+- **[Texts]**
+  -*requests_answers*: bot will choose randomly from here when complying to request from a request_command with no "to @". the reply will look like "@user request_answer"
+  -*requests_to_third_answers*: bot will choose ramdonly from here when complying to requests from a request_command with "to @" in it. the reply will look like "@userB request_to_third_answers @requester"
+
+
 Usage
 ===============
 
 **Execute it.** That's it.
-
-You probably want to set it up on your crontab (or your favorite task scheduler).
-This way, you'll have a twitter bot of your own.
 
 You also have a couple of optional arguments:
 
@@ -114,16 +112,3 @@ downloads new images to my PC from a multireddit every morning. Then, a silly
 one line bash command removes any image that is smaller than 50kb (to filter
 glitches and very small pictures). This twitter bot is set up on cron
 on my PC to execute every minute with a 1 percent execution chance.
-
-Known bugs 
-===============
-There has been some bugs reports about the repetition of images. These were
-reported for the old version of the bot and I'm pretty sure they are solved now.
-But anyhow, if the bot twitts two images in a row (or you're experiencing any other kind
-of malfunction having to do with allow_repeat_after), you should try the
-[fork by johnnykernel](https://github.com/johnnykernel/twitterImgBot).
-
-This fork doesn't have the ability to respond to request or ban images though,
-and uses a way simpler method: it moves images which were alreday tweeted to 
-a different folder.
-
