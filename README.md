@@ -20,10 +20,12 @@ Features
 
 Setup
 ===============
+You need:
+* python3
+* tweepy
+* [Twitter tokens](https://dev.twitter.com/oauth/overview/application-owner-access-token)
 
-**In short**: You'll need python3, tweepy and the [twitter tokens](https://dev.twitter.com/oauth/overview/application-owner-access-token). You need to fill the settings file inside the 'settings' folder with the appropiate information *(every option is expalined below in detail)*. You'll probably want a task scheduler too (to fully [automate the bot](#live-example-and-full-automation-idea)).
-
-**Longish explanation**:
+You'll probably also want a task scheduler like cron to [fully automate the bot](#live-example-and-full-automation-idea).
 
 Python3 comes with pretty much every modern distro, but you probably don't have tweepy installed. You should install pip.
 ```sudo apt-get install python3-pip``` and then tweepy ```pip install tweepy```.
