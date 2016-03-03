@@ -42,7 +42,7 @@ def respond_to_simple_request(tweet):
     return post_tweet(text, reply_id)
 
 
-def respond_to_gift_requests(tweet):
+def respond_to_gift_request(tweet):
     reply_id = tweet.id
     user_giver = tweet.user.screen_name
     user_gifted = ('@' + requests.request_to_whom(tweet))
@@ -53,20 +53,28 @@ def respond_to_gift_requests(tweet):
 
 def orders():
     """Handle orders given to the bot via replies"""
-    mentions = requests.mentions(config.bot_account, config.api)
-    relevant_mentions = requests.relevant_mentions(mentions, config.log_file)
+    log = config.log_file
+    time = config.time_tolerance
     master = config.master_account
     ban_command = config.ban_command
+    master_account = config.master_account
+
+    mentions = requests.mentions(config.bot_account, config.api)
+    master_mentions = requests.master_mentions(mentions, log, master_account)
+    relevant_mentions = requests.relevant_mentions(mentions, log, time)
+
     for tweet in relevant_mentions:
+        if requests.is_img_request(tweet, config.request_command):
+            if requests.mentions_third_user(tweet):
+                responde_to_gift_request(tweet)
+            else:
+                respond_to_simple_request(tweet)
+
+    for tweet in master_mentions:
         if requests.is_delete_order(tweet, master, ban_command):
             timeline.delete_last_tweet(api)
             banner.ban_last_image(config.banned_file, config.log_file)
             logger.addBanned(tweet.id, config.log_file)
-        if requests.is_img_request(tweet, config.request_command):
-            if requests.mentions_third_user(tweet):
-                respond_to_gift_requests(tweet)
-            else:
-                respond_to_simple_request(tweet)
 
 
 def parse_args(args):

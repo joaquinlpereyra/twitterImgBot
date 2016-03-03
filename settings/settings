@@ -19,6 +19,7 @@ dont_tweet_file =
 #caps agnostic
 ban_command = 
 request_command = 
+time_tolerance = 
 
 [Texts]
 #Respect indentation: it is TWO spaces

@@ -24,6 +24,7 @@ chance = int(app_config['execution_chance'])
 orders_config = config['Orders']
 ban_command = orders_config['ban_command']
 request_command = orders_config['request_command']
+time_tolerance = int(orders_config['time_tolerance'])
 answers_config = config['Texts']
 request_answers = answers_config['request_answers'].split('\n')
 request_to_third_answers = answers_config['request_to_third_answers']
