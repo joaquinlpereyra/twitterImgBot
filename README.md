@@ -55,11 +55,10 @@ Options
   - *dont_tweet_file*: full path to the banned images list file. You probably want to use *BOT_PATH/logs/banned*
 - **[Orders]**
   - *ban_command*: if master_account tweets something starting with this, will delete last tweet and ban last image posted.
-  - *request_command*: if anybody tweets something starting with this, it will give them a picture. If tweet has a "to @(userB)" in it somewhere *and* starts with the request_command, bot will interpret as a gift from user posting to userB.  
-<<<<<<< HEAD
+  - *request_command*: if anybody tweets something starting with this, it will give them a picture. If tweet has a "to @(userB)" in it somewhere *and* starts with the request_command, bot will interpret as a gift from user posting to userB.
   - *time_tolerance*: How old should a request be for it to be ignored? Do not set this to be less than the frequency with which you'll set the bot on cron.
 =======
->>>>>>> 090a06b76626306188967d7bef5b03386b85abcd
+
 - **[Texts]**
   - *requests_answers*: bot will choose randomly from here when complying to request from a request_command with no "to @". the reply will look like "@user request_answer"
   - *requests_to_third_answers*: bot will choose ramdonly from here when complying to requests from a request_command with "to @" in it. the reply will look like "@userB request_to_third_answers @requester"
