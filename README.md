@@ -30,13 +30,12 @@ You'll probably also want a task scheduler like cron to [fully automate the bot]
 
 Python3 comes with pretty much every modern distro, but you probably don't have tweepy installed. You should install pip.
 
-```sudo apt-get install python3-pip
-```
+```sudo apt-get install python3-pip```
 
 and then tweepy 
 
-```pip install tweepy
-```
+```pip install tweepy```
+
 
 You should then complete the settings file inside the settings folder. There's a [detailed explanation](#explanation) of every setting and also an [example config file](#example) in the [Options](#options) section. Please:
 
@@ -121,8 +120,8 @@ Please note that if you were using the bot and want to start using the
 tweet_this_number option, you *HAVE* to execute the bot once like this
 from the terminal after enabling the option:
 
-```python twitterbot.py --tweet --tweetnumber X
-```
+```python twitterbot.py --tweet --tweetnumber X```
+
 
 Where X is the number of the tweet you'll post right now (that is, the
 number of posts the bot has tweeted plus one, you can see the number so far
