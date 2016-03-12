@@ -30,7 +30,12 @@ You'll probably also want a task scheduler like cron to [fully automate the bot]
 
 Python3 comes with pretty much every modern distro, but you probably don't have tweepy installed. You should install pip.
 
-```sudo apt-get install python3-pip``` and then tweepy ```pip install tweepy.
+```sudo apt-get install python3-pip
+```
+
+and then tweepy 
+
+```pip install tweepy
 ```
 
 You should then complete the settings file inside the settings folder. There's a [detailed explanation](#explanation) of every setting and also an [example config file](#example) in the [Options](#options) section. Please:
