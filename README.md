@@ -14,6 +14,7 @@ Features
 * **Handles requests:** The bot will also listen to tweets containing a custom string from any user and will post a random picture for them. A list of possible text answers to be posted along with the image can be given and the bot will choose one them at random. If a tweet from user A with the custom string is found and the tweet also has a "to @(user B)" the bot will interpret that the user A is gifting an image to user B. A list of possible text answers to such "gifts" can also be given.
 * **No repeat:** The bot won't repeat images until a custom amount of pictures have been posted in between. 
 * **Tweets at random intervals:** The bot can tweet at random intervals, behaving more like a human, instead of tweeting at totally predictable times.
+* **Can post tweet number and an user defined text with each tweet:** You can make your bot tweet only the images, you can add the post number to your tweets and you can add a custom text also.  
 * **Pretty fast:** The bot checks requests, commands from the master account and checks if it needs to upload a picture in less than a second. Of course, if the bot actually needs to upload something, it will probably take more time.
 * **Logs**: This actually needs to be improved to use Python's standard logging module, but it is good as it is and it gets the job done. The log contains date, image posted and the twitt that was being replied (if any).
 * **Doesn't need much:** Really, you're all set with python, tweepy, a task scheduler like cron and a bunch of images in a folder. Of course, you'll also need [to create a Twitter app to get your API key and such](https://dev.twitter.com/oauth/overview/application-owner-access-tokens). 
@@ -28,7 +29,9 @@ You need:
 You'll probably also want a task scheduler like cron to [fully automate the bot](#live-example-and-full-automation-idea). If you use a task scheduler, set the script to run **AT LEAST** once every five minutes and use the execution_chance option to control how often the bot should tweet. If you run the script less than every five minutes, the bot can miss some requests. This is a bug to be fixed in the next version. 
 
 Python3 comes with pretty much every modern distro, but you probably don't have tweepy installed. You should install pip.
-```sudo apt-get install python3-pip``` and then tweepy ```pip install tweepy```.
+
+```sudo apt-get install python3-pip``` and then tweepy ```pip install tweepy.
+```
 
 You should then complete the settings file inside the settings folder. There's a [detailed explanation](#explanation) of every setting and also an [example config file](#example) in the [Options](#options) section. Please:
 
@@ -58,8 +61,11 @@ Options
   - *request_command*: if anybody tweets something starting with this, it will give them a picture. If tweet has a "to @(userB)" in it somewhere *and* starts with the request_command, bot will interpret as a gift from user posting to userB.
   - *time_tolerance*: How old should a request be for it to be ignored? Do not set this to be less than the frequency with which you'll set the bot on cron.
 - **[Texts]**
+  - *tweet_post_number*: True/False. This will prepend your tweets with a text looking like "Nr. X" where X is your post number. If you were using the bot already, PLEASE see the [Backwards Compatibility](#backwards-compatibility) section. 
+  - *tweet_this_text*: Just write whatever you want to be tweeted with your image. This will come after the post number, if you set tweet_post_number to True. This would most probably be a URL asociated with your bot, but you can set it to whatever you want. If you want nothing to customized text to be tweeted, just leave it blank 
   - *requests_answers*: bot will choose randomly from here when complying to request from a request_command with no "to @". the reply will look like "@user request_answer"
   - *requests_to_third_answers*: bot will choose ramdonly from here when complying to requests from a request_command with "to @" in it. the reply will look like "@userB request_to_third_answers @requester"
+
 
 ### Example
 ```
@@ -87,7 +93,11 @@ request_command = dear @gentelindaOK
 time_tolerance = 5
 
 [Texts]
-#Respect indentation
+# Respect indentation: it is TWO spaces
+# tweet_post_number is either True or False, nothing else
+# tweet this text doesn't requiere "" or '', just write the text
+tweet_post_number = True
+tweet_this_text = 
 request_answers = specially for you. xoxo
   only because you asked nicely. xoxo
   this is one of my best. be grateful. xoxo
@@ -98,6 +108,23 @@ request_answers = specially for you. xoxo
 request_to_third_answers = you just got a nice gift from
   apparently this person likes you
 ```
+
+Backwards Compatibilty
+===============
+
+Please note that if you were using the bot and want to start using the 
+tweet_this_number option, you *HAVE* to execute the bot once like this
+from the terminal after enabling the option:
+
+```python twitterbot.py --tweet --tweetnumber X
+```
+
+Where X is the number of the tweet you'll post right now (that is, the
+number of posts the bot has tweeted plus one, you can see the number so far
+on tweeter). This will log that tweet in a way so that the bot can read
+the post number from the log, so it will know now how many posts there
+have been. The --tweet option is there just to force the bot to tweet
+and ignore the execution chance.
 
 
 Usage

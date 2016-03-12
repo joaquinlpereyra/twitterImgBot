@@ -22,7 +22,12 @@ request_command =
 time_tolerance = 
 
 [Texts]
-#Respect indentation: it is TWO spaces
+# Respect indentation: it is TWO spaces
+# tweet_post_number is either True or False, nothing else
+# tweet this text doesn't requiere "" or '', just write the text
+tweet_post_number = True
+tweet_this_text =  
+
 request_answers = answer1
   answer2
   answer3

@@ -29,9 +29,11 @@ def post_tweet(text, reply_id, test=False):
         return post_tweet(text, reply_id)  # just try again
     if not test:
         status.tweet(media, tweet_text, reply_id, api)
-        logger.addPost(media, reply_id, log)
+        log_line = logger.logLine(post_number, media, reply_id)
+        logger.addLineToLog(log_line, log)
     if test:
-        logger.addPost(media, "TEST", log)
+        log_line = logger.logLine(post_number, "TEST", reply_id)
+        logger.addLineToLog(log_line, log)
 
 
 def respond_to_simple_request(tweet):
@@ -84,23 +86,47 @@ def parse_args(args):
                         action="store_true")
     parser.add_argument("--test", help="Wont't tweet, just write to log",
                         action="store_true")
+    parser.add_argument("--tweetnumber", help="If you were already using this "
+                        "bot and you want to start using the post_tweet_number"
+                        " function you'll need to tell the bot where to "
+                        "start. Use this option ONLY ONCE ")
     return parser.parse_args(args)
+
+
+def getPostNumber(log_file):
+    try:
+        post_number = open(log_file, 'r').readlines()[-1]
+        post_number = post_number.split('\t')[0]
+        return str(int(post_number)+1)
+    except (IndexError, ValueError):
+        return "1"
 
 
 def main():
     """Runs the whole program, the function of all functions"""
+    global post_number  # it's needed both here and in post_tweet()
+    global api  # it's used absolutely everywhere, so might as well be global
+
     args = parse_args(sys.argv[1:])
     test = args.test
     forceTweet = args.tweet
-    global api  # it's used absolutely everywhere, so might as well be global
+    manual_post_number = args.tweetnumber
     api = config.api
+
     orders()
+
     if random.randint(0, 99) < config.chance or test or forceTweet:
+        tweet_text = config.tweet_this_text
+        if config.tweet_post_number and manual_post_number is None:
+            post_number = getPostNumber(config.log_file)
+            tweet_text = "No. " + post_number + tweet_text
+        if manual_post_number is not None:
+            post_number = manual_post_number
+            tweet_text = "No. " + manual_post_number + tweet_text
         try:
-            post_tweet(None, None, test)
+            post_tweet(tweet_text, None, test)
         except RuntimeError:
             warning = "!CRITICAL! No non-repeated or non-banned images found"
             logger.addWarning(warning, config.log_file)
-
 if __name__ == "__main__":
     main()

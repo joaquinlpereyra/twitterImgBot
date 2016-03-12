@@ -5,9 +5,17 @@ module."""
 date = str(datetime.datetime.now())
 
 
-def addPost(img_path, reply_id, log):
-    with open(log, 'a') as log:
-        log.write(date + '\t' + str(img_path) + '\t' + str(reply_id) + '\n')
+def logLine(post_number, img_path, reply_id):
+    log_line = post_number + '\t'
+    log_line += date + '\t'
+    log_line += img_path + '\t'
+    log_line += str(reply_id) + '\n'
+    return(log_line)
+
+
+def addLineToLog(line, log_file):
+    with open(log_file, 'a') as log:
+        log.write(line)
 
 
 def addBanned(reply_id, log):
