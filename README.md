@@ -65,7 +65,7 @@ Options
   - *request_command*: if anybody tweets something starting with this, it will give them a picture. If tweet has a "to @(userB)" in it somewhere *and* starts with the request_command, bot will interpret as a gift from user posting to userB.
   - *time_tolerance*: How old should a request be for it to be ignored? Do not set this to be less than the frequency with which you'll set the bot on cron.
 - **[Texts]**
-  - *tweet_post_number*: True/False. This will prepend your tweets with a text looking like "Nr. X" where X is your post number. If you were using the bot already, PLEASE see the [Backwards Compatibility](#backwards-compatibility) section. 
+  - *tweet_post_number*: True/False. This will prepend your tweets with a text looking like "Nr. X" where X is your post number. Do read the [Backwards Compatibility](#backwards-compatibilty) section if you were using a previous version of the bot or if you will start using this bot in non empty twitter account. 
   - *tweet_this_text*: Just write whatever you want to be tweeted with your image. This will come after the post number, if you set tweet_post_number to True. This would most probably be a URL asociated with your bot, but you can set it to whatever you want. If you want nothing to customized text to be tweeted, just leave it blank 
   - *requests_answers*: bot will choose randomly from here when complying to request from a request_command with no "to @". the reply will look like "@user request_answer"
   - *requests_to_third_answers*: bot will choose ramdonly from here when complying to requests from a request_command with "to @" in it. the reply will look like "@userB request_to_third_answers @requester"
@@ -117,15 +117,17 @@ Backwards Compatibilty
 ===============
 
 Please note that if you were using the bot and want to start using the 
-tweet_this_number option, you *HAVE* to execute the bot once like this
-from the terminal after enabling the option:
+tweet_this_number option, you *HAVE* to execute the bot once (and only once!) like this
+from the terminal after enabling the option. 
 
 ```python twitterbot.py --tweet --tweetnumber X```
 
 
 Where X is the number of the tweet you'll post right now (that is, the
 number of posts the bot has tweeted plus one, you can see the number so far
-on tweeter). This will log that tweet in a way so that the bot can read
+on tweeter). 
+
+This will log that tweet in a way so that the bot can read
 the post number from the log, so it will know now how many posts there
 have been. The --tweet option is there just to force the bot to tweet
 and ignore the execution chance.
@@ -143,6 +145,7 @@ optional arguments:
   -h, --help  show this help message and exit
   --tweet     Ignores execution chance, always run
   --test      Wont't tweet, just write to log
+  --postnumber Sets the post number to be posted if tweet_post_number is true. 
 ```
 
 Live example and full automation idea
