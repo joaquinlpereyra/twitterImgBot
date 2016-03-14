@@ -36,7 +36,7 @@ def is_already_tweeted(log_file, image, tolerance):
     except IndexError:
         already_tweeted = open(log_file, 'r').readlines()
     for element in already_tweeted:
-        if element.strip() and element.split('\t')[1] == image:
+        if element.strip() and element.split('\t')[2] == image:
             # element.strip() checks if line actually has something in it
             return True
     return False
