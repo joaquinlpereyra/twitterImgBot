@@ -26,7 +26,7 @@ You need:
 * tweepy
 * [Twitter tokens](https://dev.twitter.com/oauth/overview/application-owner-access-token)
 
-You'll probably also want a task scheduler like cron to [fully automate the bot](#live-example-and-full-automation-idea). If you use a task scheduler, set the script to run **AT LEAST** once every five minutes and use the execution_chance option to control how often the bot should tweet. If you run the script less than every five minutes, the bot can miss some requests. This is a bug to be fixed in the next version. 
+You'll probably also want a task scheduler like cron to [fully automate the bot](#live-example-and-full-automation-idea). 
 
 Python3 comes with pretty much every modern distro, but you probably don't have tweepy installed. You should install pip.
 

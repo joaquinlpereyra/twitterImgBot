@@ -76,7 +76,7 @@ def orders():
         if requests.is_delete_order(tweet, master, ban_command):
             timeline.delete_last_tweet(api)
             banner.ban_last_image(config.banned_file, config.log_file)
-            logger.addBanned(tweet.id, config.log_file)
+            logger.addBanned(post_number, tweet.id, config.log_file)
 
 
 def parse_args(args):
@@ -101,7 +101,6 @@ def getPostNumber(log_file):
     except (IndexError, ValueError):
         return "1"
 
-
 def main():
     """Runs the whole program, the function of all functions"""
     global post_number  # it's needed both here and in post_tweet()
@@ -113,20 +112,22 @@ def main():
     manual_post_number = args.tweetnumber
     api = config.api
 
+    tweet_text = config.tweet_this_text
+    if config.tweet_post_number and manual_post_number is None:
+         post_number = getPostNumber(config.log_file)
+         tweet_text = "No. " + post_number + tweet_text
+    if manual_post_number is not None:
+        post_number = manual_post_number
+        tweet_text = "No. " + manual_post_number + tweet_text
+
     orders()
 
     if random.randint(0, 99) < config.chance or test or forceTweet:
-        tweet_text = config.tweet_this_text
-        if config.tweet_post_number and manual_post_number is None:
-            post_number = getPostNumber(config.log_file)
-            tweet_text = "No. " + post_number + tweet_text
-        if manual_post_number is not None:
-            post_number = manual_post_number
-            tweet_text = "No. " + manual_post_number + tweet_text
         try:
             post_tweet(tweet_text, None, test)
         except RuntimeError:
             warning = "!CRITICAL! No non-repeated or non-banned images found"
-            logger.addWarning(warning, config.log_file)
+            logger.addWarning(post_number, warning, config.log_file)
+
 if __name__ == "__main__":
     main()
