@@ -116,9 +116,7 @@ request_to_third_answers = you just got a nice gift from
 Backwards Compatibilty
 ===============
 
-Please note that if you were using the bot and want to start using the 
-tweet_this_number option, you *HAVE* to execute the bot once (and only once!) like this
-from the terminal after enabling the option. 
+Please note that if you were using a previous version of the bot you'll **have** to execute the bot once (and only once!) like this from the terminal after enabling the option. This is *specially* important if you want to use the tweet_post_number option.  
 
 ```python twitterbot.py --tweet --tweetnumber X```
 
@@ -131,6 +129,8 @@ This will log that tweet in a way so that the bot can read
 the post number from the log, so it will know now how many posts there
 have been. The --tweet option is there just to force the bot to tweet
 and ignore the execution chance.
+
+If you don't do this, your log will register the bot's post_number wrongly, starting from one since you updated. Of course, if you use the tweet_post_number function, this'll mean the post numbers the bot tweetes will make no sense. 
 
 
 Usage
