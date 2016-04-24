@@ -61,7 +61,6 @@ def orders():
     ban_command = config.ban_command
     master_account = config.master_account
 
-    mentions = requests.mentions(config.bot_account, config.api)
     master_mentions = requests.master_mentions(mentions, log, master_account)
     relevant_mentions = requests.relevant_mentions(mentions, log, time)
 
@@ -74,7 +73,8 @@ def orders():
 
     for tweet in master_mentions:
         if requests.is_delete_order(tweet, master, ban_command):
-            timeline.delete_last_tweet(api)
+            timeline.delete_tweet_by_id(tweet.in_reply_to_status_id, api)
+            #timeline.delete_last_tweet(api)
             banner.ban_last_image(config.banned_file, config.log_file)
             logger.addBanned(post_number, tweet.id, config.log_file)
 
