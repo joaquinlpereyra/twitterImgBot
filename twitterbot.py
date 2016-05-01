@@ -9,31 +9,40 @@ from logs import banner
 import random
 import argparse
 import sys
+from glob import glob
 
 """The glue that holds it all together: uses all the other modules
 to handle requests, post tweets if chance is met, calls the logger
 and parses the CLI arguments"""
 
 
-def post_tweet(text, reply_id, test=False):
-    """Actually sends a tweet to twitter"""
-    tweet = status.Tweet()
-    media = tweet.media(config.source_folder)
-    tweet_text = tweet.text(text)
+def create_tweet(text, reply_id, test=False):
+    """Creates a valid instance of a tweet with an image we know it's
+    not repeated"""
     log = config.log_file
     tolerance = config.tolerance
     banned_list = config.banned_file
-    already_tweeted = status.is_already_tweeted(log, media, tolerance)
-    banned = status.is_banned(banned_list, media)
-    if already_tweeted or banned:
-        return post_tweet(text, reply_id)  # just try again
+    media = get_random_image_from_folder(config.source_folder)
+
+    t = status.Tweet(media, text, reply_id)
+
+    while t.is_already_tweeted(log, tolerance) or t.is_banned(banned_list):
+        new_media = get_random_image_from_folder(config.source_folder)
+        t.change_media(new_media)
+
     if not test:
-        status.tweet(media, tweet_text, reply_id, api)
+        t.post_to_twitter(api)
         log_line = logger.logLine(post_number, media, reply_id)
-        logger.addLineToLog(log_line, log)
     if test:
         log_line = logger.logLine(post_number, "TEST", reply_id)
-        logger.addLineToLog(log_line, log)
+
+    logger.addLineToLog(log_line, log)
+
+
+def get_random_image_from_folder(folder):
+    media_list = glob(folder + "*")
+    media = random.choice(media_list)
+    return media
 
 
 def respond_to_simple_request(tweet):
@@ -41,7 +50,7 @@ def respond_to_simple_request(tweet):
     user_name = tweet.user.screen_name
     answer = random.choice(config.request_answers)
     text = '@' + user_name + ' ' + answer
-    return post_tweet(text, reply_id)
+    return create_tweet(text, reply_id)
 
 
 def respond_to_gift_request(tweet):
@@ -50,7 +59,7 @@ def respond_to_gift_request(tweet):
     user_gifted = ('@' + requests.request_to_whom(tweet))
     answer = random.choice(config.request_to_third_answers)
     text = (user_gifted + ' ' + answer + ' @' + user_giver)
-    return post_tweet(text, reply_id)
+    return create_tweet(text, reply_id)
 
 
 def orders():
@@ -60,6 +69,7 @@ def orders():
     master = config.master_account
     ban_command = config.ban_command
     master_account = config.master_account
+    mentions = requests.mentions(config.bot_account, api)
 
     master_mentions = requests.master_mentions(mentions, log, master_account)
     relevant_mentions = requests.relevant_mentions(mentions, log, time)
@@ -74,7 +84,7 @@ def orders():
     for tweet in master_mentions:
         if requests.is_delete_order(tweet, master, ban_command):
             timeline.delete_tweet_by_id(tweet.in_reply_to_status_id, api)
-            #timeline.delete_last_tweet(api)
+            # timeline.delete_last_tweet(api)
             banner.ban_last_image(config.banned_file, config.log_file)
             logger.addBanned(post_number, tweet.id, config.log_file)
 
@@ -101,9 +111,10 @@ def getPostNumber(log_file):
     except (IndexError, ValueError):
         return "1"
 
+
 def main():
     """Runs the whole program, the function of all functions"""
-    global post_number  # it's needed both here and in post_tweet()
+    global post_number  # it's needed both here and in create_tweet()
     global api  # it's used absolutely everywhere, so might as well be global
 
     args = parse_args(sys.argv[1:])
@@ -114,8 +125,8 @@ def main():
 
     tweet_text = config.tweet_this_text
     if config.tweet_post_number and manual_post_number is None:
-         post_number = getPostNumber(config.log_file)
-         tweet_text = "No. " + post_number + tweet_text
+        post_number = getPostNumber(config.log_file)
+        tweet_text = "No. " + post_number + tweet_text
     if manual_post_number is not None:
         post_number = manual_post_number
         tweet_text = "No. " + manual_post_number + tweet_text
@@ -124,7 +135,7 @@ def main():
 
     if random.randint(0, 99) < config.chance or test or forceTweet:
         try:
-            post_tweet(tweet_text, None, test)
+            create_tweet(tweet_text, None, test)
         except RuntimeError:
             warning = "!CRITICAL! No non-repeated or non-banned images found"
             logger.addWarning(post_number, warning, config.log_file)

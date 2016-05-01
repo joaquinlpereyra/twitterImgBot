@@ -12,15 +12,18 @@ def logLine(post_number, img_path, reply_id):
     log_line += str(reply_id) + '\n'
     return(log_line)
 
+
 def addLineToLog(line, log_file):
     with open(log_file, 'a') as log:
         log.write(line)
+
 
 def addBanned(post_number, reply_id, log):
     ban_message = "ABOVE IMAGE WAS BANNED!"
     with open(log, 'a') as log:
         log.write(post_number + '\t' + date + '\t' +
                   ban_message + '\t' + str(reply_id) + '\n')
+
 
 def addWarning(last_post_number, warning, log):
     with open(log, 'a') as log:
