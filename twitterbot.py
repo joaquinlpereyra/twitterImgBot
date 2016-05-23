@@ -71,6 +71,7 @@ def orders():
     master_account = config.master_account
     mentions = requests.mentions(config.bot_account, api)
 
+    mentions = requests.mentions(config.bot_account, config.api)
     master_mentions = requests.master_mentions(mentions, log, master_account)
     relevant_mentions = requests.relevant_mentions(mentions, log, time)
 

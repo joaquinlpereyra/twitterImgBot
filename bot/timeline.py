@@ -2,6 +2,8 @@
 
 
 def delete_last_tweet(api):
+    """ Deprecated function. Here because it may be useful. It is never
+    called"""
     last_tweet = api.user_timeline()[0].id
     api.destroy_status(last_tweet)
 
