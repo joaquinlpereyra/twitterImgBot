@@ -10,7 +10,7 @@ It can easily be used together with cron or another task scheduler to create a t
 Features
 ==============
 * **Separate config file.** You don't have to touch a line of code. Of course can also do that if you wish <3.
-* **Delete tweets upon command:** The bot listens to a master account for an specified command to delete the last tweet. It will also ban the image posted in the deleted tweet, never uploading it again. 
+* **Deletes and bans tweets upon command:** The bot listens to a master account for a tweet with a specified command to delete the tweet that was indicated by the reply id of the master command. In simple terms, that means you can delete a tweet by replying to it with a custom command from your master account. It will also ban the image posted in the deleted tweet, never uploading it again. 
 * **Handles requests:** The bot will also listen to tweets containing a custom string from any user and will post a random picture for them. A list of possible text answers to be posted along with the image can be given and the bot will choose one them at random. If a tweet from user A with the custom string is found and the tweet also has a "to @(user B)" the bot will interpret that the user A is gifting an image to user B. A list of possible text answers to such "gifts" can also be given.
 * **No repeat:** The bot won't repeat images until a custom amount of pictures have been posted in between. 
 * **Tweets at random intervals:** The bot can tweet at random intervals, behaving more like a human, instead of tweeting at totally predictable times.
