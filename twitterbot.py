@@ -17,8 +17,7 @@ and parses the CLI arguments"""
 
 
 def create_tweet(text, reply_id, test=False):
-    """Creates a valid instance of a tweet with an image we know it's
-    not repeated"""
+    """Creates an instance of a tweet"""
     log = config.log_file
     tolerance = config.tolerance
     banned_list = config.banned_file
@@ -31,10 +30,11 @@ def create_tweet(text, reply_id, test=False):
         t.change_media(new_media)
 
     if not test:
-        t.post_to_twitter(api)
-        log_line = logger.logLine(post_number, media, reply_id)
+        tweet_id = t.post_to_twitter(api)
+        log_line = logger.logLine(post_number, tweet_id, media, reply_id)
     if test:
-        log_line = logger.logLine(post_number, "TEST", reply_id)
+        log_line = logger.logLine(post_number, 'TEST_ID',
+                                  "TEST_PATH", reply_id)
 
     logger.addLineToLog(log_line, log)
 
@@ -83,9 +83,14 @@ def orders():
 
     for tweet in master_mentions:
         if requests.is_delete_order(tweet, master, ban_command):
+            id_to_delete = tweet.in_reply_to_status_id
             timeline.delete_tweet_by_id(tweet.in_reply_to_status_id, api)
             # timeline.delete_last_tweet(api)
-            banner.ban_last_image(config.banned_file, config.log_file)
+            # banner.ban_last_image(config.banned_file, config.log_file)
+            banner.ban_image_by_tweet_id(id_to_delete,
+                                         config.banned_file,
+                                         config.log_file)
+
             logger.addBanned(post_number, tweet.id, config.log_file)
 
 
@@ -106,7 +111,7 @@ def parse_args(args):
 def getPostNumber(log_file):
     try:
         post_number = open(log_file, 'r').readlines()[-1]
-        post_number = post_number.split('\t')[0]
+        post_number = post_number.split()[0]
         return str(int(post_number)+1)
     except (IndexError, ValueError):
         return "1"

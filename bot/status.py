@@ -19,9 +19,10 @@ class Tweet():
         return self.text
 
     def post_to_twitter(self, api):
-        api.update_with_media(filename=self.media,
-                              status=self.text,
-                              in_reply_to_status_id=self.reply_id)
+        status = api.update_with_media(filename=self.media,
+                                       status=self.text,
+                                       in_reply_to_status_id=self.reply_id)
+        return status.id
 
     def is_already_tweeted(self, log_file, tolerance):
         tolerance = -1*(tolerance)
