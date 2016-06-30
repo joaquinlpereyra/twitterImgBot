@@ -8,4 +8,5 @@ def delete_last_tweet(api):
     api.destroy_status(last_tweet)
 
 def delete_tweet_by_id(id_to_delete, api):
+    """Delete tweet with id id_to_delete."""
     api.destroy_status(id_to_delete)

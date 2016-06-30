@@ -42,14 +42,13 @@ def create_tweet(text, reply_id, test=False):
 
     if not test:
         tweet_id = t.post_to_twitter(api)
-        log_line = logger.logLine(post_number, tweet_id, media, reply_id)
+        log_line = logger.log_line(post_number, tweet_id, media, reply_id)
 
     else:
         # if it was a test, don't post it and mark the log line as such
-        log_line = logger.logLine(post_number, 'TEST_ID',
-                                  "TEST_PATH", reply_id)
+        log_line = logger.log_line(post_number, 'TEST_ID', "TEST_PATH", reply_id)
 
-    logger.addLineToLog(log_line, log)
+    logger.add_line_to_log(log_line, log)
     return True
 
 
@@ -113,7 +112,7 @@ def orders():
                                          config.banned_file,
                                          config.log_file)
 
-            logger.addBanned(post_number, tweet.id, config.log_file)
+            logger.add_banned_to_log(post_number, tweet.id, config.log_file)
 
 
 def parse_args(args):
@@ -190,7 +189,7 @@ def main():
         tweeted_successfully = create_tweet(tweet_text, None, test)
         if not tweeted_successfully:
             warning = "!CRITICAL! No non-repeated or non-banned images found"
-            logger.addWarning(post_number, warning, config.log_file)
+            logger.add_warning_to_log(post_number, warning, config.log_file)
 
 if __name__ == "__main__":
     main()
