@@ -13,8 +13,13 @@ from glob import glob
 
 """The glue that holds it all together: uses all the other modules
 to handle requests, post tweets if chance is met, calls the logger
-and parses the CLI arguments"""
+and parses the CLI arguments.
 
+Some lingo used through the code:
+    master_account is setted in the config, should be the owner of the bot.
+    gift, gifted: a gift is a request for the bot to tweet an image for a third
+                  person, like: "hey bot give my gf @girlfriend an image!"
+"""
 
 def create_tweet(text, reply_id, test=False):
     """Sends a tweet to twitter, making sure it is not repeated and logs
@@ -115,18 +120,6 @@ def orders():
             logger.add_banned_to_log(post_number, tweet.id, config.log_file)
 
 
-def parse_args(args):
-    """Parses arguments from command line"""
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--tweet", help="Ignores execution chance, always run",
-                        action="store_true")
-    parser.add_argument("--test", help="Wont't tweet, just write to log",
-                        action="store_true")
-    parser.add_argument("--tweetnumber", help="If you were already using this "
-                        "bot and you want to start using the post_tweet_number"
-                        " function you'll need to tell the bot where to "
-                        "start. Use this option ONLY ONCE ")
-    return parser.parse_args(args)
 
 
 def get_post_number_from_log(log_file):
@@ -145,7 +138,7 @@ def get_post_number(manual_post_number):
     """Gets the post number either from the manual_post_number set by
     the user from the CLI or from the log.
     """
-    if manual_post_number_set is not None:
+    if manual_post_number is not None:
         return manual_post_number
     else:
         return get_post_number_from_log(config.log_file)
@@ -159,6 +152,20 @@ def create_tweet_text(raw_text, post_number, tweet_post_number):
         return "No. " + post_number + raw_text
     else:
         return raw_text
+
+
+def parse_args(args):
+    """Parses arguments from command line"""
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--tweet", help="Ignores execution chance, always run",
+                        action="store_true")
+    parser.add_argument("--test", help="Wont't tweet, just write to log",
+                        action="store_true")
+    parser.add_argument("--tweetnumber", help="If you were already using this "
+                        "bot and you want to start using the post_tweet_number"
+                        " function you'll need to tell the bot where to "
+                        "start. Use this option ONLY ONCE ")
+    return parser.parse_args(args)
 
 
 def main():
@@ -183,7 +190,7 @@ def main():
     tweet_post_number = config.tweet_post_number
 
     post_number = get_post_number(manual_post_number)
-    tweet_text = create_tweet_text(tweet_raw_text, tweet_post_number, post_number)
+    tweet_text = create_tweet_text(tweet_raw_text, post_number, tweet_post_number)
 
     if random.randint(0, 99) < config.chance or test or forceTweet:
         tweeted_successfully = create_tweet(tweet_text, None, test)
