@@ -4,6 +4,68 @@ from unittest.mock import MagicMock
 from unittest.mock import patch
 from unittest.mock import mock_open
 
+
+class TestOrders(unittest.TestCase):
+    """Honestly there is nothing to test here. Order function is just pretty
+    much a collection of calls to other functions: those should be tested
+    instead."""
+    pass
+
+class TestGetTweetNumber(unittest.TestCase):
+    """Tests for the twitterbot.get_post_number function"""
+
+    def test_manual_post_number_is_not_None(self):
+        post_number = twitterbot.get_post_number(5)
+        self.assertEqual(post_number, 5)
+
+    def test_manual_post_number_is_None(self):
+        # avoid dealing with the actual log by patching get_post_number_from_log
+        with patch('twitterbot.get_post_number_from_log', return_value=5):
+            post_number = twitterbot.get_post_number(None)
+            self.assertEqual(post_number, 5)
+
+
+class TestGetPostNumberFromLog(unittest.TestCase):
+    """Tests for the twitterbot.get_post_number_from_log function."""
+
+    def test_log_with_at_least_an_entry(self):
+        fake_log = (
+            "948\t749421180906536960\t2016-07-02 22:55:02.178206\t/home/u/imgs/3.jpg\tNone\n"
+            "949\t749426484322918400\t2016-07-02 23:16:02.080331\t/home/u/imgs/2.jpg\tNone\n"
+            "950\t749447858588381184\t2016-07-03 00:41:01.872862\t/home/u/imgs/1.jpg\tNone\n"
+        )
+
+        with patch('builtins.open', mock_open(read_data=fake_log)) as fake_log:
+            post_number = twitterbot.get_post_number_from_log('whatever_im_mocking')
+        self.assertEqual('951', post_number)
+
+    def test_log_with_no_entries(self):
+        fake_log = ""
+        with patch('builtins.open', mock_open(read_data=fake_log)) as fake_log:
+            post_number = twitterbot.get_post_number_from_log('whatever_im_mocking')
+        self.assertEqual(post_number, "1")
+
+
+class TestTweetText(unittest.TestCase):
+    """Tests for the twitterbot.create_tweet_text function"""
+
+    def test_without_post_number(self):
+        text = twitterbot.create_tweet_text('test text', 0, False)
+        self.assertEqual(text, 'test text')
+
+    def test_with_post_number(self):
+        text = twitterbot.create_tweet_text('test text', 0, True)
+        self.assertEqual(text, 'No. 0 test text')
+
+    def test_empty_tweet_this_text_without_post_number(self):
+        text = twitterbot.create_tweet_text('', 0, False)
+        self.assertEqual(text, '')
+
+    def test_empty_tweet_this_text_with_post_number(self):
+        text = twitterbot.create_tweet_text('', 0, True)
+        self.assertEqual(text, 'No. 0')
+
+
 class TestMainFunction(unittest.TestCase):
     """Test the twitterbot.main function"""
 
@@ -47,61 +109,4 @@ class TestMainFunction(unittest.TestCase):
         mock_create_tweet.assert_called_once_with('automatic testing', None, False)
         warning_string = "!CRITICAL! No non-repeated or non-banned images found"
         mock_add_warning_to_log.assert_called_once_with(0, warning_string, 'log_file')
-
-
-
-
-class TestTweetText(unittest.TestCase):
-    """Tests for the twitterbot.create_tweet_text function"""
-
-    def test_without_post_number(self):
-        text = twitterbot.create_tweet_text('test text', 0, False)
-        self.assertEqual(text, 'test text')
-
-    def test_with_post_number(self):
-        text = twitterbot.create_tweet_text('test text', 0, True)
-        self.assertEqual(text, 'No. 0 test text')
-
-    def test_empty_tweet_this_text_without_post_number(self):
-        text = twitterbot.create_tweet_text('', 0, False)
-        self.assertEqual(text, '')
-
-    def test_empty_tweet_this_text_with_post_number(self):
-        text = twitterbot.create_tweet_text('', 0, True)
-        self.assertEqual(text, 'No. 0')
-
-
-class TestGetTweetNumber(unittest.TestCase):
-    """Tests for the twitterbot.get_post_number function"""
-
-    def test_manual_post_number_is_not_None(self):
-        post_number = twitterbot.get_post_number(5)
-        self.assertEqual(post_number, 5)
-
-    def test_manual_post_number_is_None(self):
-        # avoid dealing with the actual log by patching get_post_number_from_log
-        with patch('twitterbot.get_post_number_from_log', return_value=5):
-            post_number = twitterbot.get_post_number(None)
-            self.assertEqual(post_number, 5)
-
-
-class TestGetPostNumberFromLog(unittest.TestCase):
-    """Tests for the twitterbot.get_post_number_from_log function."""
-
-    def test_log_with_at_least_an_entry(self):
-        fake_log = (
-            "948\t749421180906536960\t2016-07-02 22:55:02.178206\t/home/u/imgs/3.jpg\tNone\n"
-            "949\t749426484322918400\t2016-07-02 23:16:02.080331\t/home/u/imgs/2.jpg\tNone\n"
-            "950\t749447858588381184\t2016-07-03 00:41:01.872862\t/home/u/imgs/1.jpg\tNone\n"
-        )
-
-        with patch('builtins.open', mock_open(read_data=fake_log)) as fake_log:
-            post_number = twitterbot.get_post_number_from_log('whatever_im_mocking')
-        self.assertEqual('951', post_number)
-
-    def test_log_with_no_entries(self):
-        fake_log = ""
-        with patch('builtins.open', mock_open(read_data=fake_log)) as fake_log:
-            post_number = twitterbot.get_post_number_from_log('whatever_im_mocking')
-        self.assertEqual(post_number, "1")
 

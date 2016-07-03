@@ -105,7 +105,7 @@ def orders():
     for tweet in relevant_mentions:
         if requests.is_img_request(tweet, config.request_command):
             if requests.mentions_third_user(tweet):
-                responde_to_gift_request(tweet)
+                respond_to_gift_request(tweet)
             else:
                 respond_to_simple_request(tweet)
 
