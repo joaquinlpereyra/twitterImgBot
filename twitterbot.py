@@ -124,7 +124,7 @@ def orders():
 
 def get_post_number_from_log(log_file):
     """Tries to get a post number from the log. If it can't, it means
-    it must be the first.
+    it must be the first. Returns the number as a string.
     """
     try:
         post_number = open(log_file, 'r').readlines()[-1]
@@ -136,7 +136,7 @@ def get_post_number_from_log(log_file):
 
 def get_post_number(manual_post_number):
     """Gets the post number either from the manual_post_number set by
-    the user from the CLI or from the log.
+    the user from the CLI or from the log. Returns number as string.
     """
     if manual_post_number is not None:
         return manual_post_number
@@ -149,9 +149,14 @@ def create_tweet_text(raw_text, post_number, tweet_post_number):
     by the user, the post_number and the boolean tweet_post_number.
     """
     if tweet_post_number:
-        return "No. " + post_number + raw_text
+        if raw_text:
+            tweet_text =  "No. " + str(post_number) + " " + raw_text
+        else:
+            tweet_text =  "No. " + str(post_number)
     else:
-        return raw_text
+        tweet_text = raw_text
+
+    return tweet_text
 
 
 def parse_args(args):
