@@ -4,6 +4,43 @@ from unittest.mock import MagicMock
 from unittest.mock import patch
 from unittest.mock import mock_open
 
+class TestHandleTweetPosting(unittest.TestCase):
+    @patch('twitterbot.get_random_image_from_folder', return_value=('img1', 1))
+    @patch('twitterbot.config.log_file', '')
+    @patch('twitterbot.config.tolerance', 50)
+    @patch('twitterbot.config.banned_file', '')
+    def test_everything_okey_case(self, get_random_image_mock):
+        mock_tweet = MagicMock()
+        mock_tweet.is_already_tweeted.return_value = False
+        mock_tweet.is_banned.return_value = False
+
+
+
+class TestRespondeToRequests(unittest.TestCase):
+    @patch('twitterbot.config.request_to_third_answers', ['only_answer'])
+    def test_respond_to_gift(self):
+        mock_request = MagicMock()
+        mock_request.id = "0"
+        mock_request.user.screen_name = 'tester'
+        mock_request.text = "dear @bot give a gift to @gf"
+        mock_handle_tweet_posting = MagicMock()
+        mock_handle_tweet_posting.return_value = True
+
+        with patch('twitterbot.handle_tweet_posting', mock_handle_tweet_posting):
+            twitterbot.respond_to_gift_request(mock_request)
+
+        mock_handle_tweet_posting.assert_called_once_with("@gf only_answer @tester", "0")
+
+    @patch('twitterbot.config.request_answers', ['only_answer'])
+    def test_respond_to_request(self):
+        mock_request = MagicMock()
+        mock_request.id = 0
+        mock_request.user.screen_name = "requester"
+        mock_handle_tweet_posting = MagicMock()
+        with patch('twitterbot.handle_tweet_posting', mock_handle_tweet_posting):
+            twitterbot.respond_to_simple_request(mock_request)
+        mock_handle_tweet_posting.assert_called_once_with("@requester only_answer", 0)
+
 
 class TestOrders(unittest.TestCase):
     """Honestly there is nothing to test here. Order function is just pretty
@@ -79,14 +116,14 @@ class TestMainFunction(unittest.TestCase):
     @patch('twitterbot.config.tweet_this_text', 'whatever')
     @patch('twitterbot.config.tweet_post_number', 'whatever')
     def test_tweet_sane_values(self, _, __, ___):
-        """Tests if the tweet is sent to twitterbot.create_tweet with
+        """Tests if the tweet is sent to twitterbot.handle_tweet_posting with
         the values it should.
         """
-        mock_create_tweet = MagicMock()
-        mock_create_tweet.return_value = True
-        with patch('twitterbot.create_tweet', mock_create_tweet):
+        mock_handle_tweet_posting = MagicMock()
+        mock_handle_tweet_posting.return_value = True
+        with patch('twitterbot.handle_tweet_posting', mock_handle_tweet_posting):
             twitterbot.main()
-        mock_create_tweet.assert_called_once_with('automatic testing', None, False)
+        mock_handle_tweet_posting.assert_called_once_with('automatic testing', None, False)
 
     @patch('sys.argv', ['script_name', '--tweet'])
     @patch('twitterbot.get_post_number', return_value=0)
@@ -99,14 +136,14 @@ class TestMainFunction(unittest.TestCase):
     @patch('twitterbot.config.log_file', 'log_file')
     @patch('twitterbot.logger.add_warning_to_log', return_value=True)
     def test_log_if_tweet_not_successful(self, _, __, ___, _____):
-        mock_create_tweet = MagicMock()
-        mock_create_tweet.return_value = False
+        mock_handle_tweet_posting = MagicMock()
+        mock_handle_tweet_posting.return_value = False
         mock_add_warning_to_log = MagicMock()
-        patch_create_tweet = patch('twitterbot.create_tweet', mock_create_tweet)
+        patch_handle_tweet_posting = patch('twitterbot.handle_tweet_posting', mock_handle_tweet_posting)
         patch_add_warning_to_log = patch('twitterbot.logger.add_warning_to_log', mock_add_warning_to_log)
-        with patch_add_warning_to_log, patch_create_tweet:
+        with patch_add_warning_to_log, patch_handle_tweet_posting:
             twitterbot.main()
-        mock_create_tweet.assert_called_once_with('automatic testing', None, False)
+        mock_handle_tweet_posting.assert_called_once_with('automatic testing', None, False)
         warning_string = "!CRITICAL! No non-repeated or non-banned images found"
         mock_add_warning_to_log.assert_called_once_with(0, warning_string, 'log_file')
 

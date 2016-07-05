@@ -21,7 +21,7 @@ Some lingo used through the code:
                   person, like: "hey bot give my gf @girlfriend an image!"
 """
 
-def create_tweet(text, reply_id, test=False):
+def handle_tweet_posting(text, reply_id, test=False):
     """Sends a tweet to twitter, making sure it is not repeated and logs
     it to our log file. If no non repeated or non banned images found, return
     False. If operation was succesful, return True.
@@ -70,23 +70,23 @@ def get_random_image_from_folder(folder):
 def respond_to_simple_request(request_tweet):
     """Gets the information neccesary from request_tweet to reply to it.
     """
-    reply_id = tweet.id
-    user_name = tweet.user.screen_name
+    reply_id = request_tweet.id
+    user_name = request_tweet.user.screen_name
     answer = random.choice(config.request_answers)
     text = '@' + user_name + ' ' + answer
-    return create_tweet(text, reply_id)
+    return handle_tweet_posting(text, reply_id)
 
 
 def respond_to_gift_request(request_tweet):
     """Gets the information neccesary from request_tweet to reply to the user
     specified in the request_tweet, as this is a gift request.
     """
-    reply_id = tweet.id
-    user_giver = tweet.user.screen_name
-    user_gifted = ('@' + requests.request_to_whom(tweet))
+    reply_id = request_tweet.id
+    user_giver = request_tweet.user.screen_name
+    user_gifted = ('@' + requests.request_to_whom(request_tweet))
     answer = random.choice(config.request_to_third_answers)
     text = (user_gifted + ' ' + answer + ' @' + user_giver)
-    return create_tweet(text, reply_id)
+    return handle_tweet_posting(text, reply_id)
 
 
 def orders():
@@ -118,8 +118,6 @@ def orders():
                                          config.log_file)
 
             logger.add_banned_to_log(post_number, tweet.id, config.log_file)
-
-
 
 
 def get_post_number_from_log(log_file):
@@ -180,7 +178,7 @@ def main():
     tweet_chance in the settings against a random integer between 0 and 99
     """
 
-    global post_number  # it's needed both here and in create_tweet()
+    global post_number  # it's needed both here and in handle_tweet_posting()
     global api  # it's used absolutely everywhere, so might as well be global
 
     args = parse_args(sys.argv[1:])
@@ -189,7 +187,6 @@ def main():
     manual_post_number = args.tweetnumber
 
     api = config.api
-    orders()
 
     tweet_raw_text = config.tweet_this_text
     tweet_post_number = config.tweet_post_number
@@ -197,8 +194,10 @@ def main():
     post_number = get_post_number(manual_post_number)
     tweet_text = create_tweet_text(tweet_raw_text, post_number, tweet_post_number)
 
+    orders()
+
     if random.randint(0, 99) < config.chance or test or forceTweet:
-        tweeted_successfully = create_tweet(tweet_text, None, test)
+        tweeted_successfully = handle_tweet_posting(tweet_text, None, test)
         if not tweeted_successfully:
             warning = "!CRITICAL! No non-repeated or non-banned images found"
             logger.add_warning_to_log(post_number, warning, config.log_file)
