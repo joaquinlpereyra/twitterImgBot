@@ -25,7 +25,7 @@ def master_mentions(mention_list, log, master):
 
 
 def relevant_mentions(mentions, log, time):
-    "Filters mentions by time and checks if they've already been answered"
+    "Returns a filtered list of mentions by time and already-answered-ness."""
     relevant_mentions = []
     for tweet in mentions:
         if is_recent(tweet, time) and not already_answered(tweet, log):
@@ -34,56 +34,67 @@ def relevant_mentions(mentions, log, time):
 
 
 def is_recent(tweet, time_in_minutes):
+    """Return True if a tweet is considered recent within the context of
+    time_in_minutes (ie: if it was posted less than time_in_minutes ago).
+    """
     expiration_time = datetime.timedelta(minutes=time_in_minutes)
     tweet_date = tweet.created_at
     time_since_order = datetime.datetime.utcnow() - tweet_date
-    if time_since_order < expiration_time:
-        return True
+    return time_since_order < expiration_time
 
 
 def is_delete_order(mention, master_account, ban_command):
-    "Check if is a valid delete order"
+    """Check if mention is a valid (ie: from the master acount) delete order
+    (ie: starts with the ban_command).
+    """
     mention = mention.text.lower()
     ban_command = ban_command.lower()
-    if mention.startswith(ban_command):
-        return True
+    return mention.startswith(ban_command)
 
 
 def is_img_request(mention, request_command):
-    if mention.text.lower().startswith(request_command.lower()):
-        return True
-    else:
-        return False
+    """Return True if mention start with the request_command."""
+    return mention.text.lower().startswith(request_command.lower())
 
 
 def who_asks(mention):
+    """Return the username (@username, with the at and all) of the
+    poster of the mention.
+    """
     user_name = "@" + mention.user.screen_name
     return user_name
 
 
 def is_from_master(mention, master_account):
-    if who_asks(mention) == master_account:
-        return True
+    """Return True if the mention was tweeted from master_account, False
+    otherwise.
+    """
+    return who_asks(mention) == master_account
 
 
 def already_answered(tweet, log_file):
-    "Open logs file to see if the request has already been answered"
+    """Return True if the tweet id is found in a line of the log_file, False
+    otherwise."""
     with open(log_file, 'r') as log:
         for line in log:
             if str(tweet.id) in line:
                 return True
+        else:
+            return False
 
 
 def mentions_third_user(tweet):
-    if "to @" in tweet.text.lower():
-        return True
+    """Return True if the tweet mentions a third user (that is, has a "to @"
+    somewhere in the tweet text) False otherwise.
+    """
+    return "to @" in tweet.text.lower()
 
 
 def request_to_whom(tweet):
-    "Returns the user to whom the gift shall be sent"
+    """Return the user to whom a tweet should be sent. Intended for gifts."""
     tweet = tweet.text
-    divide_tweet = tweet.partition("to @")[2]
-    whom = divide_tweet.partition(" ")[0]
+    divide_tweet = tweet.partition("to @")[2]  # ["send", "to @", "amemulo!. and also friends"]
+    whom = divide_tweet.partition(" ")[0]  # ["amemulo!.", "and", "friends"]
     # requests to "@fri_end!" should be given to "@fri_end" not "@fri_end!"
     realWhom = ""
     for letter in whom:

@@ -29,7 +29,7 @@ request_command = orders_config['request_command']
 time_tolerance = int(orders_config['time_tolerance'])
 
 text_config = config['Texts']
-tweet_post_number = bool(text_config['tweet_post_number'])
+tweet_post_number = text_config.getboolean('tweet_post_number')
 tweet_this_text = text_config['tweet_this_text']
 request_answers = text_config['request_answers'].split('\n')
 request_to_third_answers = text_config['request_to_third_answers']
