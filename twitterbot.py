@@ -9,7 +9,7 @@ from logs import banner
 import random
 import argparse
 import sys
-import os
+from glob import glob
 
 """The glue that holds it all together: uses all the other modules
 to handle requests, post tweets if chance is met, calls the logger
@@ -62,10 +62,7 @@ def get_random_image_from_folder(folder):
     It's up the user to check (or not) if the return file is actually an
     image.
     """
-    media_list = []
-    for dirpath, dirnames, files in os.walk(folder):
-      for f in files:
-        media_list.append(os.path.join(dirpath, f)
+    media_list = glob(folder + "*")
     media = random.choice(media_list)
     return media, len(media_list)
 
