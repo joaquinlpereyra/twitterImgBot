@@ -64,8 +64,8 @@ def get_random_image_from_folder(folder):
     """
     media_list = []
     for dirpath, dirnames, files in os.walk(folder):
-      for f in files:
-        media_list.append(os.path.join(dirpath, f)
+        for f in files:
+            media_list.append(os.path.join(dirpath, f))
     media = random.choice(media_list)
     return media, len(media_list)
 
